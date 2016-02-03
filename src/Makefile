@@ -107,11 +107,8 @@ MONOMAC_SOURCES = $(EXTRA_MONOMAC_SOURCES) \
 	./WebKit/WebKit.cs				\
 	./WebKit/WebView.cs				\
 	./OpenGL/FrameEventArgs.cs			\
-	./OpenGL/IGameWindow.cs				\
-	./OpenGL/INativeWindow.cs			\
 	./OpenGL/WindowBorder.cs			\
 	./OpenGL/WindowState.cs				\
-	./OpenGL/MonoMacGameView.cs			\
 	./Security/Authorization.cs
 
 OPENTK_SOURCES = \
@@ -210,16 +207,16 @@ parse.exe: parse.cs $(MACCORE_DIR)/src/Options.cs
 	$(MCS) -debug parse.cs $(MACCORE_DIR)/src/Options.cs
 
 core.dll: $(CORE_SOURCES) $(SHARED_CORE_SOURCES) Makefile
-	$(MCS) -target:library -debug -unsafe -out:core.dll -define:MONOMAC,MONOMAC_BOOTSTRAP,COREBUILD$(CORE_DLL_DEFINES) $(CORE_SOURCES) $(SHARED_CORE_SOURCES) -r:System.Drawing
+	$(MCS) -target:library -debug -unsafe -out:core.dll -define:MONOMAC,MONOMAC_BOOTSTRAP,COREBUILD$(CORE_DLL_DEFINES) $(CORE_SOURCES) $(SHARED_CORE_SOURCES)
 
 _bmac.exe: $(APIS) core.dll $(GENERATOR_SOURCES)
-	$(MCS) -unsafe -out:_bmac.exe -debug $(DEFINES) -define:GENERATOR,MONOMAC,MONOMAC_BOOTSTRAP $(GENERATOR_SOURCES) -r:core.dll -r:System.Drawing
+	$(MCS) -unsafe -out:_bmac.exe -debug $(DEFINES) -define:GENERATOR,MONOMAC,MONOMAC_BOOTSTRAP $(GENERATOR_SOURCES) -r:core.dll
 
 generated_sources: _bmac.exe $(APIS) 
-	/Library/Frameworks/Mono.framework/Commands/mono --debug _bmac.exe --compiler=$(MCS) -a -d=MONOMAC $(BMAC_DEFINES) --core --sourceonly=generated_sources -v -tmpdir=. $(APIS) --baselib=core.dll --ns=MonoMac.ObjCRuntime -r=System.Drawing $(BMAC_OPTIONS)
+	/Library/Frameworks/Mono.framework/Commands/mono --debug _bmac.exe --compiler=$(MCS) -a -d=MONOMAC $(BMAC_DEFINES) --core --sourceonly=generated_sources -v -tmpdir=. $(APIS) --baselib=core.dll --ns=MonoMac.ObjCRuntime $(BMAC_OPTIONS)
 
 bmac.exe: $(TARGET) $(GENERATOR_SOURCES)
-	$(MCS) -unsafe -out:bmac.exe -debug $(DEFINES) -define:GENERATOR,MONOMAC,MONOMAC_BOOTSTRAP $(GENERATOR_SOURCES) -r:$(TARGET) -r:System.Drawing
+	$(MCS) -unsafe -out:bmac.exe -debug $(DEFINES) -define:GENERATOR,MONOMAC,MONOMAC_BOOTSTRAP $(GENERATOR_SOURCES) -r:$(TARGET)
 
 count: 
 	make pass | wc -l
@@ -228,7 +225,7 @@ counts:
 	make pass | grep 'could not be' | sed 's/.*`//' | sed "s/'.*//" | sort | uniq -c | sort -n
 
 $(TARGET): $(SOURCES) generated_sources $(MONOMAC_SOURCES) $(SHARED_SOURCES) $(SHARED_CORE_SOURCES) $(OPENTK_SOURCES)
-	$(MCS) -define:OBJECT_REF_TRACKING -nowarn:3021,0219,0414,$(WARNINGS_I_SHOULD_FIX) -debug -unsafe $(SOURCES) @generated_sources $(MONOMAC_SOURCES) $(SHARED_SOURCES) $(SHARED_CORE_SOURCES) $(OPENTK_SOURCES) -target:library -define:MONOMAC -out:$(TARGET) -r:System.Drawing
+	$(MCS) -define:OBJECT_REF_TRACKING -nowarn:3021,0219,0414,$(WARNINGS_I_SHOULD_FIX) -debug -unsafe $(SOURCES) @generated_sources $(MONOMAC_SOURCES) $(SHARED_SOURCES) $(SHARED_CORE_SOURCES) $(OPENTK_SOURCES) -target:library -define:MONOMAC -out:$(TARGET)
 
 MonoMac.CFNetwork.dll: $(CFNETWORK_SOURCES) $(TARGET)
 	/Library/Frameworks/Mono.framework/Commands/mcs -debug -target:library -define:MONOMAC -r:System.Net.Http -r:$(TARGET) -out:MonoMac.CFNetwork.dll $(CFNETWORK_SOURCES)

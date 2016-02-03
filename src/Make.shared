@@ -156,6 +156,20 @@ SHARED_SOURCE = \
 	./Darwin/SystemLog.cs
 
 SHARED_CORE_SOURCE = \
+../../System.Drawing.Stub/ColorConverter.cs \
+../../System.Drawing.Stub/KnownColors.cs \
+../../System.Drawing.Stub/KnownColor.cs \
+../../System.Drawing.Stub/Color.cs \
+../../System.Drawing.Stub/Point.cs \
+../../System.Drawing.Stub/PointConverter.cs \
+../../System.Drawing.Stub/PointF.cs \
+../../System.Drawing.Stub/Rectangle.cs \
+../../System.Drawing.Stub/RectangleConverter.cs \
+../../System.Drawing.Stub/RectangleF.cs \
+../../System.Drawing.Stub/Size.cs \
+../../System.Drawing.Stub/SizeConverter.cs \
+../../System.Drawing.Stub/SizeFConverter.cs \
+../../System.Drawing.Stub/SizeF.cs \
 	./AVFoundation/Enums.cs				\
 	./AVFoundation/AVAudioSettings.cs			\
 	./AVFoundation/AVUrlAssetOptions.cs	\
